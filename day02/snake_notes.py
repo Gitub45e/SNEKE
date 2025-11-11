@@ -3,7 +3,7 @@ import pygame, random
 # Initialize pygame
 pygame.init()
 
-# Set the display window
+# Set display window
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
 size = (WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -11,7 +11,7 @@ display_surface = pygame.display.set_mode(size)
 pygame.display.set_caption("~~SNEKE~~")
 
 # Set FSP and clock
-Fps = 20
+# TODO: make a variable (constant) called FPS and initialize to 20
 clock = pygame.time.Clock()
 
 # Set game values
@@ -54,7 +54,7 @@ title_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2) # places the box contain
 #TODO: place the center of continue_rect  to an x coordinate of half the WINDOW_WIDTH and y coordinate of half the WINDOW_HEIGHT + 64
 
 # Set sounds and music
-pickup_sound = pygame.mixer.Sound("pick_up_sound.wav")
+pickup_sound = pygame.mixer.Sound("pickup_sound.wav")
 
 # Set images (in this case, use simple rects...so just create their coordinates)
 # For a rectangle you need (top-left x, top-left y, width, height)
@@ -76,9 +76,9 @@ while running:
         # Move the snake
 
     # Add the head coordinate to the first index of the body coordinate list
-    # This will essentially move all the snake body by one position in the list
+    # This will essentially move all the snakes body by one position in the list
 
-    # Update the x,y position of the snake head and make a new coordinate
+    # Update the x,y position of the snakes head and make a new coordinate
 
     # Check for game over
 
