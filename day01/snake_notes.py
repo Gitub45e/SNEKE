@@ -3,7 +3,7 @@ import pygame, random
 # Initialize pygame
 pygame.init()
 
-# Set display window
+# Set the display window
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
 size = (WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -52,9 +52,9 @@ while running:
         # Move the snake
 
     # Add the head coordinate to the first index of the body coordinate list
-    # This will essentially move all the snakes body by one position in the list
+    # This will essentially move all the snake body by one position in the list
 
-    # Update the x,y position of the snakes head and make a new coordinate
+    # Update the x,y position of the snake head and make a new coordinate
 
     # Check for game over
 
