@@ -1,5 +1,7 @@
 import pygame, random
 
+import pick_up_sound.wav
+
 # Initialize pygame
 pygame.init()
 
@@ -7,7 +9,7 @@ pygame.init()
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
 size = (WINDOW_WIDTH, WINDOW_HEIGHT)
-display_surface = pygame.display.set_mode(size)
+display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("~~SNEKE~~")
 
 # Set FSP and clock
@@ -53,7 +55,7 @@ continue_rect = continue_text.get_rect()
 continue_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 64)
 
 # Set sounds and music
-pickup_sound = pygame.mixer.Sound("pickup_sound.wav")
+pick_up_sound.wav  = pygame.mixer.Sound("pick_up_sound.wav")
 
 # Set images (in this case, use simple rects...so just create their coordinates)
 # For a rectangle you need (top-left x, top-left y, width, height)
