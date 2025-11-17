@@ -73,46 +73,47 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
         # Move the snake
         # TODO: check if the event.type is pygame.KEYDOWN
-            # Inside the block of the if statement where we checked if the eventy type is KEYDOWN
-            # TODO: check if the event.key is pygame.K_LEFT.
-                # Inside the block of the K_LEFT if statement
-                # TODO: assign -1 * SNAKE_SIZE 'TO' snake_dx.  This moves the snake 1 SNAKE_SIZE to the left.
-                # TODO: assign 0 'TO' snake_dy.  We may have been moving up or down.  This cancels that movement out.
-            # TODO: check if the event.key is pygame.K_RIGHT.
-                # Inside the block of the K_RIGHT if statement.
-                # TODO: assign SNAKE_SIZE 'TO' snake_dx.  This moves the snake 1 SNAKE_SIZE to the right.
-                # TODO: assign 0 'TO' snake_dy.  We may have been moving up or down.  This cancels that movement out.
-            # TODO: check if the event.key is pygame.K_UP.
-                # Inside the block of the K_UP if statement.
-                # TODO: assign 0 'TO' snake_dx.  We may have been moving left or right.  This cancels that movement out.
-                # TODO: assign -1 * SNAKE_SIZE 'TO' snake_dx. This moves the snake 1 SNAKE_SIZE up.
-            # TODO: check if the event.key is pygame.K_DOWN.
-                # Inside the block of the K_DOWN if statement.
-                # TODO: assign 0 'TO' snake_dx.  We may have been moving left or right.  This cancels that movement out.
-                # TODO: assign SNAKE_SIZE 'TO' snake_dx. This moves the snake 1 SNAKE_SIZE down.
-
-
-    # Add the head coordinate to the first index of the body coordinate list
-    # This will essentially move all the snakes body by one position in the list
-    # TODO: call body_coords's insert function passing in the index (0) and head_coord
-    # TODO: call body_coords's pop function passing in no arguments.
-
-    # Update the x,y position of the snakes head and make a new coordinate
-    # TODO: add snake_dx 'TO' head_x
-    # TODO: add snake_dy 'TO' head_y
-    # TODO: reassign (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE) 'TO' head_coord
-
-    # Check for game over
-
-    # Check for collisions
-
-    # Update HUD
-    # TODO: reassign to score_text much like you did previously, but now the text should be an f-string: f"Score: {score}"
-    # TODO: same todo just ran out of room:  use same settings for alias, color, and background color
-
-    # Fill the surface
+    #             # Inside the block of the if statement where we checked if the eventy type is KEYDOWN
+    #             # TODO: check if the event.key is pygame.K_LEFT.
+    #                 # Inside the block of the K_LEFT if statement
+    #                 # TODO: assign -1 * SNAKE_SIZE 'TO' snake_dx.  This moves the snake 1 SNAKE_SIZE to the left.
+    #                 # TODO: assign 0 'TO' snake_dy.  We may have been moving up or down.  This cancels that movement out.
+    #             # TODO: check if the event.key is pygame.K_RIGHT.
+    #                 # Inside the block of the K_RIGHT if statement.
+    #                 # TODO: assign SNAKE_SIZE 'TO' snake_dx.  This moves the snake 1 SNAKE_SIZE to the right.
+    #                 # TODO: assign 0 'TO' snake_dy.  We may have been moving up or down.  This cancels that movement out.
+    #             # TODO: check if the event.key is pygame.K_UP.
+    #                 # Inside the block of the K_UP if statement.
+    #                 # TODO: assign 0 'TO' snake_dx.  We may have been moving left or right.  This cancels that movement out.
+    #                 # TODO: assign -1 * SNAKE_SIZE 'TO' snake_dx. This moves the snake 1 SNAKE_SIZE up.
+    #             # TODO: check if the event.key is pygame.K_DOWN.
+    #                 # Inside the block of the K_DOWN if statement.
+    #                 # TODO: assign 0 'TO' snake_dx.  We may have been moving left or right.  This cancels that movement out.
+    #                 # TODO: assign SNAKE_SIZE 'TO' snake_dx. This moves the snake 1 SNAKE_SIZE down.
+    #
+    #
+    #     # Add the head coordinate to the first index of the body coordinate list
+    #     # This will essentially move all the snakes body by one position in the list
+    #     # TODO: call body_coords's insert function passing in the index (0) and head_coord
+    #     # TODO: call body_coords's pop function passing in no arguments.
+    #
+    #     # Update the x,y position of the snakes head and make a new coordinate
+    #     # TODO: add snake_dx 'TO' head_x
+    #     # TODO: add snake_dy 'TO' head_y
+    #     # TODO: reassign (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE) 'TO' head_coord
+    #
+    #     # Check for game over
+    #
+    #     # Check for collisions
+    #
+    #     # Update HUD
+    #     # TODO: reassign to score_text much like you did previously, but now the text should be an f-string: f"Score: {score}"
+    #     # TODO: same todo just ran out of room:  use same settings for alias, color, and background color
+    #
+    #     # Fill the surface
     # TODO: Read below.  One TODO, require's explanation
     ''' 
     The display_surface has a function we can use called fill, which takes one color argument.  
@@ -140,8 +141,6 @@ while running:
     2. assign to head_rect the results from calling pygame.draw.rect passing in display_surface, GREEN, and head_coord.
     3. assign to apple_rect the results from calling pygame.draw.rect passing in display_surface, RED, and apple_coord  
     '''
-
-
 
     # Blit assets
     # TODO: Read below.  2 TODO's, require's explanation
