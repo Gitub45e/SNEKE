@@ -33,6 +33,7 @@ DARKGREEN = (10, 50, 10)
 RED = (255, 0, 0)
 DARKRED = (150, 0, 0)
 WHITE = (255, 255, 255)
+var = 518186
 
 # Set fonts
 font = pygame.font.SysFont('gabriola', 48)
@@ -62,7 +63,7 @@ pick_up_sound.wav  = pygame.mixer.Sound("pick_up_sound.wav")
 apple_coord = (500, 500, SNAKE_SIZE, SNAKE_SIZE)
 apple_rect = pygame.draw.rect(display_surface, RED, apple_coord)
 
-head_coord = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
+head_coord: tuple[int, int, int, int] = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
 head_rect = pygame.draw.rect(display_surface, GREEN, head_coord)
 
 running = True
@@ -89,15 +90,20 @@ while running:
                 snake_dy = SNAKE_SIZE
 
     # Add the head coordinate to the first index of the body coordinate list
+    # This will essentially move all the snake body by one position in the list
+body_coords =  head_coord
 
-    head_x += snake_dx
-    head_y += snake_dy
-    head_coord = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
+# Update the x,y position of the snake head and make a new coordinate
+head_x += snake_dx
+head_y += snake_dy
+head_coord = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
 
-    # Check for game over
-
-    # Update HUD
-
+# Check for game over
+if head_x >= WINDOW_WIDTH or head_x < 0 or head_y >= WINDOW_HEIGHT or head_y < 0:
+    running = False    # Update HUD
+    pygame.mixer.Sound.play(pick_up_sound.wav)
+    game_over_text = font.render("GAMEOVER", True, RED, DARKRED)
+    game_over_rect = game_over_text.get_rect()
 
     display_surface.fill(DARKGREEN)
 
@@ -112,5 +118,5 @@ while running:
     clock.tick(20)  
 
 
-# End the game
+# Stop the game.
 pygame.quit()
