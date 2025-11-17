@@ -1,122 +1,211 @@
-import pygame, random
+import pygame
+import random
+import os
 
-import pick_up_sound.wav
-
-# Initialize pygame
+# --- 1. Initialize Pygame and Setup Window ---
 pygame.init()
 
 # Set the display window
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
-size = (WINDOW_WIDTH, WINDOW_HEIGHT)
 display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("~~SNEKE~~")
 
 # Set FSP and clock
-FPS = 20
+FPS = 12  # Lowered FPS slightly for smoother movement on a grid
 clock = pygame.time.Clock()
 
-# Set game values
+# --- 2. Game Constants and Variables ---
 SNAKE_SIZE = 20
 
-head_x = WINDOW_WIDTH // 2
-head_y = WINDOW_HEIGHT // 2 + 100
-
-snake_dx = 0
-snake_dy = 0
-
-score = 0
-
-# Set colors
-GREEN = (0, 255, 0)  # (r, g, b)
+# Colors
+GREEN = (0, 200, 0)
 DARKGREEN = (10, 50, 10)
 RED = (255, 0, 0)
 DARKRED = (150, 0, 0)
 WHITE = (255, 255, 255)
-var = 518186
 
-# Set fonts
-font = pygame.font.SysFont('gabriola', 48)
+# Fonts
+font = pygame.font.SysFont('Gabriela', 48)
 
-# Set text
-title_text = font.render("~~Snake~~", True, GREEN, DARKRED)
-title_rect = title_text.get_rect()
-title_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2)
+# Game State Variables
+score = 0
+snake_dx = SNAKE_SIZE  # Initial movement right
+snake_dy = 0
+game_status = 'PLAYING'  # 'PLAYING' or 'GAME_OVER'
 
-score_text = font.render("Score: 0", True, GREEN, DARKRED)
-score_rect = score_text.get_rect()
-score_rect.topleft = (10, 10)
+# Sound setup (Requires 'pick_up_sound.wav' in the same directory)
+try:
+    pygame.mixer.init()
+    pick_up_sound = pygame.mixer.Sound("pick_up_sound.wav")
+except pygame.error:
+    print("Warning: Sound file 'pick_up_sound.wav' not found. Sound disabled.")
 
-game_over_text = font.render("GAMEOVER", True, RED, DARKRED)
-game_over_rect = game_over_text.get_rect()
-game_over_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
 
-continue_text = font.render("Press any key to play again", True, RED, DARKGREEN)
-continue_rect = continue_text.get_rect()
-continue_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 64)
+    # Create a placeholder object if sound fails to prevent crashes
+    class DummySound:
+        def play(self):
+            pass
 
-# Set sounds and music
-pick_up_sound.wav  = pygame.mixer.Sound("pick_up_sound.wav")
 
-# Set images (in this case, use simple rects...so just create their coordinates)
-# For a rectangle you need (top-left x, top-left y, width, height)
-apple_coord = (500, 500, SNAKE_SIZE, SNAKE_SIZE)
-apple_rect = pygame.draw.rect(display_surface, RED, apple_coord)
+    pick_up_sound = DummySound()
 
-head_coord: tuple[int, int, int, int] = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
-head_rect = pygame.draw.rect(display_surface, GREEN, head_coord)
+# Initialize Snake Body and Apple
+body_coords = []  # List of (x, y) tuples for each segment
+head_x = WINDOW_WIDTH // 2
+head_y = WINDOW_HEIGHT // 2
 
+
+def random_apple_coord():
+    """Generates a random coordinate for the apple on the grid."""
+    # Ensure the apple is placed on a grid point
+    rand_x = random.randint(0, (WINDOW_WIDTH - SNAKE_SIZE) // SNAKE_SIZE) * SNAKE_SIZE
+    rand_y = random.randint(0, (WINDOW_HEIGHT - SNAKE_SIZE) // SNAKE_SIZE) * SNAKE_SIZE
+    return rand_x, rand_y, SNAKE_SIZE, SNAKE_SIZE
+
+
+apple_coord = random_apple_coord()
+apple_rect = pygame.Rect(apple_coord)
+
+
+# --- 3. Game Functions ---
+
+def reset_game():
+    """Resets all game variables for a new game."""
+    global score, head_x, head_y, snake_dx, snake_dy, body_coords, game_status, apple_coord, apple_rect
+    score = 0
+    head_x = WINDOW_WIDTH // 2
+    head_y = WINDOW_HEIGHT // 2
+    snake_dx = SNAKE_SIZE
+    snake_dy = 0
+    body_coords = []
+    game_status = 'PLAYING'
+    apple_coord = random_apple_coord()
+    apple_rect = pygame.Rect(apple_coord)
+
+
+def check_collisions():
+    """Checks for boundary, self, and apple collisions."""
+    global head_x, head_y, game_status, apple_coord, score
+
+    head_rect = pygame.Rect(head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
+
+    # 1. Check Boundary Collision
+    if head_x < 0 or head_x >= WINDOW_WIDTH or head_y < 0 or head_y >= WINDOW_HEIGHT:
+        game_status = 'GAME_OVER'
+        return
+
+    # 2. Check Self-Collision
+    # Check if the head coordinates are in the body list (excluding the current head position)
+    if (head_x, head_y) in [(x, y) for x, y, w, h in body_coords[1:]]:
+        game_status = 'GAME_OVER'
+        return
+
+    # 3. Check Apple Collision
+    if head_rect.colliderect(apple_rect):
+        score += 1
+        pick_up_sound.play()
+        # Generate new apple coordinates
+        new_apple_coord = random_apple_coord()
+
+        # Ensure the new apple does not spawn on the snake's body
+        while new_apple_coord[0:2] in [(x, y) for x, y, w, h in body_coords]:
+            new_apple_coord = random_apple_coord()
+
+        apple_coord = new_apple_coord
+        # We DON'T pop the tail segment, allowing the snake to grow
+
+    # If no apple collision, the snake moves, so the body needs to be trimmed
+    else:
+        # If the snake is not a single block, remove the tail
+        if body_coords:
+            body_coords.pop()
+
+
+def draw_elements():
+    """Draws all game elements to the display surface."""
+    display_surface.fill(DARKGREEN)
+
+    # Draw Apple
+    pygame.draw.rect(display_surface, RED, apple_rect)
+
+    # Draw Snake
+    for segment in body_coords:
+        pygame.draw.rect(display_surface, GREEN, segment)
+
+    # Draw Score
+    score_text = font.render(f"Score: {score}", True, WHITE)
+    display_surface.blit(score_text, (10, 10))
+
+
+def draw_game_over():
+    """Draws the Game Over screen."""
+    display_surface.fill(DARKGREEN)
+
+    game_over_text = font.render("GAME OVER", True, RED)
+    game_over_rect = game_over_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 32))
+
+    final_score_text = font.render(f"Final Score: {score}", True, WHITE)
+    final_score_rect = final_score_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 16))
+
+    continue_text = font.render("Press SPACE to play again", True, WHITE)
+    continue_rect = continue_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 80))
+
+    display_surface.blit(game_over_text, game_over_rect)
+    display_surface.blit(final_score_text, final_score_rect)
+    display_surface.blit(continue_text, continue_rect)
+
+
+# --- 4. Main Game Loop ---
 running = True
 while running:
-    
+    # 4.1 Handle Events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-     
-        
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                snake_dx = -SNAKE_SIZE
-                snake_dy = 0
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                snake_dx = SNAKE_SIZE
-                snake_dy = 0
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
-                snake_dx = 0
-                snake_dy = -SNAKE_SIZE
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                snake_dx = 0
-                snake_dy = SNAKE_SIZE
+            if game_status == 'PLAYING':
+                # Prevent immediate 180-degree turns
+                if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and snake_dx == 0:
+                    snake_dx = -SNAKE_SIZE
+                    snake_dy = 0
+                elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and snake_dx == 0:
+                    snake_dx = SNAKE_SIZE
+                    snake_dy = 0
+                elif (event.key == pygame.K_UP or event.key == pygame.K_w) and snake_dy == 0:
+                    snake_dx = 0
+                    snake_dy = -SNAKE_SIZE
+                elif (event.key == pygame.K_DOWN or event.key == pygame.K_s) and snake_dy == 0:
+                    snake_dx = 0
+                    snake_dy = SNAKE_SIZE
 
-    # Add the head coordinate to the first index of the body coordinate list
-    # This will essentially move all the snake body by one position in the list
-body_coords =  head_coord
+            elif game_status == 'GAME_OVER':
+                if event.key == pygame.K_SPACE:
+                    reset_game()
 
-# Update the x,y position of the snake head and make a new coordinate
-head_x += snake_dx
-head_y += snake_dy
-head_coord = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
+    # 4.2 Game Logic Update (Only if playing)
+    if game_status == 'PLAYING':
+        # 1. Update Head Position
+        head_x += snake_dx
+        head_y += snake_dy
 
-# Check for game over
-if head_x >= WINDOW_WIDTH or head_x < 0 or head_y >= WINDOW_HEIGHT or head_y < 0:
-    running = False    # Update HUD
-    pygame.mixer.Sound.play(pick_up_sound.wav)
-    game_over_text = font.render("GAMEOVER", True, RED, DARKRED)
-    game_over_rect = game_over_text.get_rect()
+        # 2. Add the new head segment to the body list
+        head_coord = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
+        body_coords.insert(0, head_coord)  # Prepend new head
 
-    display_surface.fill(DARKGREEN)
+        # 3. Check Collisions (This handles growth and setting GAME_OVER status)
+        check_collisions()
 
+    # 4.3 Drawing
+    if game_status == 'PLAYING':
+        draw_elements()
+    elif game_status == 'GAME_OVER':
+        draw_game_over()
 
-    display_surface.blit(score_text, score_rect)
-
-    apple_rect = pygame.draw.rect(display_surface, RED, apple_coord)
-    head_rect = pygame.draw.rect(display_surface, GREEN, head_coord)
-
-
+    # 4.4 Update Display and Tick Clock
     pygame.display.update()
-    clock.tick(20)  
+    clock.tick(FPS)
 
-
-# Stop the game.
+# --- 5. Clean Exit ---
 pygame.quit()
