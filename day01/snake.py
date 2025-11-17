@@ -40,13 +40,19 @@ try:
     pick_up_sound = pygame.mixer.Sound("pick_up_sound.wav")
 except pygame.error:
     print("Warning: Sound file 'pick_up_sound.wav' not found. Sound disabled.")
+if not pygame.mixer: print("Warning: ...")
+
+# Create a placeholder object
+class DummySound:
+    def play(self):
+        pass
+
+pick_up_sound = DummySound()
 
 
-    # Create a placeholder object if sound fails to prevent crashes
-    class DummySound:
-        def play(self):
-            pass
-
+# Create a placeholder object if sound fails to prevent crashes
+class DummySound:
+def play(self):
 
     pick_up_sound = DummySound()
 
@@ -64,7 +70,7 @@ def random_apple_coord():
     return rand_x, rand_y, SNAKE_SIZE, SNAKE_SIZE
 
 
-apple_coord = random_apple_coord()
+apple_coord = new_apple_coord = random_apple_coord()
 apple_rect = pygame.Rect(apple_coord)
 
 
