@@ -11,7 +11,7 @@ display_surface = pygame.display.set_mode(size)
 pygame.display.set_caption("~~SNEKE~~")
 
 # Set FSP and clock
-# TODO: make a variable (constant) called FPS and initialize to 20
+Fps = 20
 clock = pygame.time.Clock()
 
 # Set game values
@@ -54,7 +54,7 @@ title_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2) # places the box contain
 #TODO: place the center of continue_rect  to an x coordinate of half the WINDOW_WIDTH and y coordinate of half the WINDOW_HEIGHT + 64
 
 # Set sounds and music
-pickup_sound = pygame.mixer.Sound("pickup_sound.wav")
+pickup_sound = pygame.mixer.Sound("pick_up_sound.wav")
 
 # Set images (in this case, use simple rects...so just create their coordinates)
 # For a rectangle you need (top-left x, top-left y, width, height)
