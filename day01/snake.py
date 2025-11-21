@@ -51,10 +51,13 @@ pick_up_sound = DummySound()
 
 
 # Create a placeholder object if sound fails to prevent crashes
-class DummySound:
-def play(self):
+def play():
 
-    pick_up_sound = DummySound()
+   pick_up_sound = DummySound()
+
+
+class DummySound:
+    pass
 
 # Initialize Snake Body and Apple
 body_coords = []  # List of (x, y) tuples for each segment
@@ -72,7 +75,6 @@ def random_apple_coord():
 
 apple_coord = new_apple_coord = random_apple_coord()
 apple_rect = pygame.Rect(apple_coord)
-
 
 # --- 3. Game Functions ---
 
