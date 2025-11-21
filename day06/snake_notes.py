@@ -3,7 +3,7 @@ import pygame, random
 # Initialize pygame
 pygame.init()
 
-# Set display window
+# Set the display window
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
 size = (WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -117,7 +117,7 @@ while running:
 
         pass # TODO: remove this line.
 
-    # Check for unpause.  If so reset game.
+    # Check for unpausing.  If so, reset the game.
     while is_paused:
         for event in pygame.event.get():
             # The player wants to quit
@@ -163,7 +163,7 @@ while running:
     # Blit HUD
     # TODO: Read below.  2 TODO's, require's explanation
     '''
-    Blitting means copying an image from it's source (the code) to it's destination (the display) 
+    Biting means copying an image from it's source (the code) to it's destination (the display) 
     This is necessary after updating the source (score changes, snake, and apple change etc.)
     1. "Call display_surface's blit function.  It takes 2 arguments, text and rect surrounding that text.  
     Pass in title_text and title_rect to blit the title to the screen
@@ -185,7 +185,7 @@ while running:
     # TODO: Read below.  2 TODO's, require's explanation
     '''
     Calling pygame.draw.rect is a way to blit rectangles.  
-    The blit function for display_surface is for direct blitting.  
+    The blit function for display_surface is for direct biting.  
     2 ways to do similar things.  Update the display
     1. "Call pygame.draw.rect and passing in display_surface, GREEN, and head_coord for the head of the snake
     2. "Call pygame.draw.rct again pass in display_surface, RED, and apple_coord for the apple.  
