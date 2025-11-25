@@ -51,14 +51,9 @@ pick_up_sound = DummySound()
 
 
 # Create a placeholder object if sound fails to prevent crashes
-def play():
+def play(DummySound):
 
    pick_up_sound = DummySound()
-
-
-class DummySound:
-    pass
-
 # Initialize Snake Body and Apple
 body_coords = []  # List of (x, y) tuples for each segment
 head_x = WINDOW_WIDTH // 2
@@ -112,13 +107,15 @@ def check_collisions():
     # 3. Check Apple Collision
     if head_rect.colliderect(apple_rect):
         score += 1
-        pick_up_sound.play()
-        # Generate new apple coordinates
-        new_apple_coord = random_apple_coord()
+import pick_up_sound.wav
+play (pick_up_sound.wav)
+ # Generate new apple coordinates
+new_apple_coord = random_apple_coord()
 
-        # Ensure the new apple does not spawn on the snake's body
-        while new_apple_coord[0:2] in [(x, y) for x, y, w, h in body_coords]:
-            new_apple_coord = random_apple_coord()
+#    Ensure the new apple does not spawn on the snake's body
+    while new_apple_coord[0:2] in [(x, y) for x, y, w, h in body_coords]:
+            new_apple_coord = random_apple_coord
+
 
         apple_coord = new_apple_coord
         # We DON'T pop the tail segment, allowing the snake to grow
